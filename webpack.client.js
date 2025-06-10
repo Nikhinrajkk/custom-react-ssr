@@ -13,7 +13,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -21,17 +21,24 @@ module.exports = {
             presets: ['@babel/preset-env', '@babel/preset-react']
           }
         }
-      },
-    ],
+      }
+    ]
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx']
   },
   plugins: [
     new WebpackAssetsManifest({
       output: 'assets.json',
       publicPath: '/static/',
-      writeToDisk: true
-    }),
-  ],
+      customize() {
+        return {
+          key: 'client',
+          value: {
+            js: ['/static/client.bundle.js']
+          }
+        };
+      }
+    })
+  ]
 };

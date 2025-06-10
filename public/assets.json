@@ -1,4 +1,7 @@
 {
-  "client.bundle.js.LICENSE.txt": "/static/client.bundle.js.LICENSE.txt",
-  "main.js": "/static/client.bundle.js"
+  "client": {
+    "js": [
+      "/static/client.bundle.js"
+    ]
+  }
 }

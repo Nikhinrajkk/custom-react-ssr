@@ -1,6 +1,20 @@
 const express = require('express');
 const path = require('path');
 const { renderApp } = require('./dist/server');
+const assets = require('./public/assets.json');
+
+const cssLinksFromAssets = (assets) => {
+  const css = assets.entrypoints?.main?.assets?.css || [];
+  return css.map(asset => `<link rel="stylesheet" href="${asset}">`).join('');
+};
+
+const jsScriptTagsFromAssets = (assets, ...extra) => {
+  const js = assets.client.js || [];
+
+  console.log(assets, ...extra, js);
+
+  return js.map(asset => `<script src="${asset}" ${extra.join(' ')} defer></script>`).join('');
+};
 
 const app = express();
 
@@ -30,10 +44,11 @@ app.use((req, res) => {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>React SSR App</title>
+          ${cssLinksFromAssets(assets)}
         </head>
         <body>
           <div id="root">${html}</div>
-          <script src="/static/client.bundle.js"></script>
+          ${jsScriptTagsFromAssets(assets, 'defer')}          
         </body>
       </html>
     `);
